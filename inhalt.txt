@@ -1,0 +1,8 @@
+<!doctype html>
+<html>
+<body style="background:yellow; border-left:16px double magenta">
+  <h1 style="font-size:30px; color:blue; text-align:center">Hallo Welt</h1>
+  <p style="font-size:18px; background:white; padding:12px">Dies ist eine <b style="font-size:1.3em; color:red; border:3px solid green; padding:3px">schnelle</b> Vorschau.</p>
+</body>
+</html>
+    

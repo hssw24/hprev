@@ -1,0 +1,17 @@
+HTML lernen (Code nach "<")
+
+HTML ist die Standard-Auszeichnungssprache für Webseiten.
+
+HTML ist leicht zu lernen – es wird Spaß machen!
+
+Lerne CSS (Code nach "style=")
+
+CSS ist die Sprache, mit der ein HTML-Dokument gestaltet wird.
+
+CSS beschreibt, wie HTML-Elemente dargestellt werden sollen.
+
+Mein Tipp
+
+Verändere im Code nur die Zahlen, Farben und den Text.
+
+(p) by hssw 2025

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <!-- Mobile-optimiert -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HTML Live-Preview</title>
+  
+    <!-- Dein CSS (entweder inline oder extern) -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Externes JS-File -->
+  <script src="dynamic_ui 2.js" defer ></script>
+  
+  <style>
+    /* Grundlayout: Bildschirm in zwei Bereiche teilen (oben Eingabe, unten Vorschau) */
+    html,body { height:100%; margin:0; font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    .wrap { display:flex; flex-direction:column; height:92vh; }
+
+    /* Obere Zone: Code-Eingabe */
+    textarea {
+      height:42vh;              /* ca. 42% der Höhe für Eingabe (auf Mobil praktikabel) */
+      width:100%;
+      box-sizing:border-box;
+      padding:10px;
+      font-family: monospace;   /* monospace für Code */
+      font-size:16px;
+      border: none;
+      outline: none;
+      resize: none;             /* nicht skalierbar (besser fürs Mobile) */
+    }
+
+    /* Kleine Trennlinie */
+    .divider { height:2px; background:gray; }
+
+    /* Untere Zone: gerenderte Vorschau */
+    .preview {
+      flex:1;                   /* nimmt restliche Höhe ein */
+      border:0;
+      width:100%;
+    }
+
+    /* Label-Leiste (klein, oben) */
+    .bar {
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:2px 8px;
+      background:lightblue;
+      border-bottom:2px solid gray;
+      font-size:13px;
+    }
+
+    /* einfacher Button (optional) */
+    button {
+      margin-left:auto;
+      padding:6px 8px;
+      font-size:13px;
+      border-radius:6px;
+      border:1px solid black;
+      background:pink;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="wrap">
+    <!-- Kopfzeile mit kurzen Labels -->
+    <div class="bar">
+      <strong>Oben:</strong> HTML/CSS
+      <strong style="margin-left:8px">Unten:</strong> Ergebnis
+      <!-- Button zum Zurücksetzen (optional) 
+      <button id="reset">Reset</button> --> 
+    </div>
+
+    <!-- Textarea für HTML-Code -->
+    <!-- Hinweis: wir verwenden plain-text und zeigen das Ergebnis im iframe -->
+    <textarea id="editor" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    </textarea>
+
+    <div class="divider"></div>
+
+    <!-- iframe für Live-Vorschau; srcdoc wird per JS gesetzt -->
+  <!--
+    <iframe id="preview" class="preview" sandbox=""></iframe>
+  -->
+  
+    <iframe id="preview" class="preview" sandbox="allow-forms allow-popups allow-same-origin"></iframe>
+  
+  </div>
+  
+//  <script type="module">
+  // erst a.js laden & ausführen, dann b.js
+//  await import('./textarea-ext.js');
+//  await import('./preview.js');
+//</script>
+
+  <script type="module" src="textarea-ext.js"></script>
+
+  <script type="module" src="preview.js" defer></script>
+
+</body>
+</html>
