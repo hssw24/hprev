@@ -23,6 +23,12 @@
                 .then(textInhalt => {
                     // Den geladenen Text in die 'value'-Eigenschaft der Textarea einfügen.
                     textbereich.value = textInhalt;
+                    
+ 
+
+// Falls du in preview.js einen listener auf 'input' hast:
+textbereich.dispatchEvent(new Event('input', { bubbles: true }));                  
+                    
                 })
                 // Wenn ein Fehler auftritt (z.B. Datei nicht gefunden):
                 .catch(error => {
