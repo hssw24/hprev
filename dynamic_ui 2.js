@@ -1,4 +1,4 @@
-// dynamic_ui.js (überarbeitet)
+// dynamic_ui.js (überarbeitet, + Zurück-Button links)
 // Fügt Header am Anfang ein, prüft Duplikate und injiziert minimale Styles.
 // Nutzung: <script src="dynamic_ui.js" defer></script> im iframe / Dokument.
 
@@ -14,8 +14,10 @@ if (!document.getElementById('site-header')) {
       :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.4}
       html,body{margin:0;padding:0;background:#f7f7f7;color:#111}
       header#site-header{display:flex;align-items:center;justify-content:space-between;padding:0px 6px;background:lightgray;box-shadow:0 1px 0 rgba(0,0,0,0.06);z-index:10}
-      header#site-header h1{font-size:16px;margin:0}
+      header#site-header h1{font-size:16px;margin:0;flex:1;text-align:center} /* >>> NEU: flex und zentriert, damit Title mittig bleibt <<< */
       #info-btn{width:44px;height:38px;border-radius:8px;border:1px solid black;background:cyan;font-weight:700;font-size:16px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+      /* >>> NEU: Style für Back-Button (links) <<< */
+      #back-btn{width:44px;height:38px;border-radius:8px;border:1px solid black;background:#eee;font-weight:700;font-size:16px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-right:6px}
       main{padding:0px}
       #info-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);padding:20px;z-index:9999}
       #info-modal.hidden{display:none}
@@ -43,13 +45,26 @@ if (!document.getElementById('site-header')) {
   function buildUI() {
     // HEADER
     const header = el('header', { id: 'site-header' });
+
+    // >>> NEU: Zurück-Button links (schließt auf iPhones die Tastatur durch Blur) <<<
+    const backBtn = el('button', {
+      id: 'back-btn',
+      ariaLabel: 'Zurück (Tastatur schließen)',
+      title: 'Zurück'
+    }, '←');
+    // <<< NEU
+
     const h1 = el('h1', {}, 'HTML und CSS / Editor');
+
     const infoBtn = el('button', {
       id: 'info-btn',
       ariaHaspopup: 'dialog',
       ariaControls: 'info-modal',
       ariaLabel: 'Information'
     }, 'i');
+
+    // Reihenfolge: Back-Button, Titel, Info-Button
+    header.appendChild(backBtn); // >>> NEU: hinzugefügt <<< 
     header.appendChild(h1);
     header.appendChild(infoBtn);
 
@@ -121,6 +136,36 @@ if (!document.getElementById('site-header')) {
       modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
     }
+
+    // >>> NEU: Verhalten des Zurück-Buttons: schließt Tastatur (iOS) indem das aktive Eingabefeld geblurred wird. <<<
+    function hideKeyboardOnIOS() {
+      try {
+        const active = document.activeElement;
+        const isInput = active && (
+          active.tagName === 'INPUT' ||
+          active.tagName === 'TEXTAREA' ||
+          active.isContentEditable
+        );
+
+        if (isInput) {
+          // Standard: blur das aktive Element
+          active.blur();
+        } else {
+          // Fallback: blur alle Eingabeelemente (falls Fokus intern liegt)
+          const els = document.querySelectorAll('input, textarea, [contenteditable="true"]');
+          els.forEach(elm => { try { elm.blur(); } catch (e) { /* ignore */ } });
+        }
+
+        // Optional: setze kurz Fokus auf den Header-Button, damit kein unsichtbares Fokus-Element bleibt
+        backBtn.focus();
+      } catch (err) {
+        // Fehler ignorieren — kein kritischer Abbruch
+        console.warn('hideKeyboardOnIOS Fehler:', err);
+      }
+    }
+
+    backBtn.addEventListener('click', hideKeyboardOnIOS);
+    // <<< NEU
   }
 
   // DOM-Ready: falls schon geladen, direkt aufrufen
